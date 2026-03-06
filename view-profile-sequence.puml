@@ -1,0 +1,34 @@
+@startuml View Profile API Sequence
+title View Profile API - Sequence Diagram
+
+actor Client
+participant "API Gateway" as GW
+participant "Auth Service" as Auth
+participant "User Service" as US
+database "User DB" as DB
+
+Client -> GW: GET /api/users/{userId}
+activate GW
+
+GW -> Auth: Validate Token
+activate Auth
+Auth -> Auth: Extract JWT & Verify Signature
+Auth --> GW: Token Valid
+deactivate Auth
+
+GW -> US: Get User Profile (userId)
+activate US
+
+US -> DB: Query User (userId)
+activate DB
+DB --> US: User Record
+deactivate DB
+
+US -> US: Format Response\n(sanitize fields)
+US --> GW: User Profile JSON
+deactivate US
+
+GW --> Client: 200 OK\n{\n  "id": "user123",\n  "name": "John Doe",\n  "email": "john@example.com",\n  "joinDate": "2024-01-15"\n}
+deactivate GW
+
+@enduml

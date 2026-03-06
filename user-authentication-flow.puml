@@ -1,0 +1,40 @@
+@startuml User Authentication Flow
+title User Authentication Flow - Sequence Diagram
+
+actor User
+participant "Client App" as Client
+participant "Auth Service" as Auth
+participant "JWT Manager" as JWT
+participant "User DB" as DB
+
+User -> Client: Enter Username & Password
+activate Client
+
+Client -> Auth: POST /auth/login\n(username, password)
+activate Auth
+
+Auth -> DB: Query User by Username
+activate DB
+DB --> Auth: User Record (with hashed pwd)
+deactivate DB
+
+Auth -> Auth: Compare Password Hash\nvs Input Password
+alt Password Match
+    Auth -> JWT: Generate JWT Token
+    activate JWT
+    JWT -> JWT: Create JWT\n(userId, role, exp: 24h)
+    JWT --> Auth: Signed Token
+    deactivate JWT
+    
+    Auth --> Client: 200 OK\n{\n  "accessToken": "eyJ...",\n  "user": {"id": "123", "role": "user"}\n}
+else Password Mismatch
+    Auth --> Client: 401 Unauthorized\n{"error": "Invalid credentials"}
+end
+
+deactivate Auth
+
+Client -> Client: Store access token\n(localStorage/sessionStorage)
+Client --> User: Login Success
+deactivate Client
+
+@enduml
