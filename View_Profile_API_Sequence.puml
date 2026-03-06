@@ -1,0 +1,24 @@
+@startuml View_Profile_Sequence
+participant "View Profile API\n(/loyalty/odh/viewProfile)" as ViewAPI
+participant "View Profile fn" as ViewFn
+participant "Verified Profile\nDatastore" as Datastore
+
+ViewAPI ->> ViewFn: invoke(request)
+activate ViewFn
+
+ViewFn ->> ViewFn: Validate data format\n(request validation)
+alt Validation Failed
+    ViewFn -->> ViewAPI: Error(Invalid Format)
+else Validation Passed
+    ViewFn ->> Datastore: retrieve(profileId)
+    activate Datastore
+    
+    Datastore -->> ViewFn: ProfileData
+    deactivate Datastore
+    
+    ViewFn -->> ViewAPI: ProfileData
+end
+
+deactivate ViewFn
+
+@enduml

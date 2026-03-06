@@ -1,0 +1,40 @@
+@startuml User_to_Profile_Page_Sequence
+actor User
+participant "Profile Page\n(Profile SPA)" as ProfilePage
+participant "View Profile API\n(/loyalty/odh/viewProfile)" as ViewAPI
+participant "View Profile fn" as ViewFn
+participant "Verified Profile\nDatastore" as Datastore
+
+User ->> ProfilePage: Navigate to Profile Page
+activate ProfilePage
+
+ProfilePage ->> ViewAPI: GET /loyalty/odh/viewProfile\n(profileRequest)
+activate ViewAPI
+
+ViewAPI ->> ViewFn: invoke(request)
+activate ViewFn
+
+ViewFn ->> ViewFn: Validate data format\n(request validation)
+alt Validation Failed
+    ViewFn -->> ViewAPI: Error(Invalid Format)
+    ViewAPI -->> ProfilePage: Error Response
+else Validation Passed
+    ViewFn ->> Datastore: retrieve(profileId)
+    activate Datastore
+    
+    Datastore -->> ViewFn: ProfileData
+    deactivate Datastore
+    
+    ViewFn -->> ViewAPI: ProfileData
+end
+
+deactivate ViewFn
+
+ViewAPI -->> ProfilePage: HTTP 200\n{profileData}
+deactivate ViewAPI
+
+ProfilePage ->> ProfilePage: Render Profile Data
+ProfilePage -->> User: Display Profile Page
+deactivate ProfilePage
+
+@enduml

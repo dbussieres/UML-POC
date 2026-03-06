@@ -1,0 +1,91 @@
+﻿@startuml
+
+package "Profile management (ID: 10340)" {
+
+  package "Backend (ID: 14750)" {
+
+    package "Datastore (ID: 14506)" {
+
+      [Verified Profile Datastore]
+
+    }
+
+    package "API (ID: 14751)" {
+
+      package "Profile Retrieval API (ID: 12287)" {
+
+        [View Profile API (Alias: /loyalty/odh/viewProfile)]
+        [View Profile fn]
+        [DBaaS Declarative Profile API (Alias: tbc)]
+        [View Profile API - LCBO (Alias: /loyalty/odh/lcboProfile)]
+        [View Profile fn - LCBO]
+        [Get loyalty profile fn]
+        [Get loyalty profile fn]
+        [Web View Profile API (Alias: /loyalty/webviewprofile)]
+        [Web View Profile fn]
+        [Get subscriptions API (Alias: /loyalty/profile/getsubscriptions)]
+        [Get subscriptions Fn]
+        [Get Derived Profile API]
+        [Get Derived Profile fn]
+        [Get Profile Kilo API (Alias: /loyalty/profile/getProfileKilo)]
+        [Get Profile Kilo fn]
+        [Get Profile Summary fn]
+
+      }
+
+      package "Profile Update API (ID: 12288)" {
+
+        [Edit EIP profile API (Alias: /loyalty/profile/editeipProfile)]
+        [Edit EIP Profile fn (Alias: /loyalty/profile/editeipProfile)]
+        [Update Profile Lite Enrollment API]
+        [DBaas Partner Profile API - To delete]
+
+      }
+
+      package "Profile Validation API (ID: 12289)" {
+
+        [Retrieve Member Info API (Alias: /loyalty/retrieveMemberInfo)]
+
+      }
+
+      package "Appsync Profile API (ID: 12292)" {
+
+        [Retrieve Profile Resolver fn]
+        [Appsync RetrieveProfile Resolvers]
+        [Profile API]
+        [Retrieve Profile API]
+
+      }
+
+      package "Wallet API (ID: 5777)" {
+
+        [Add card to payment API (Alias: /loyalty/acTokenStore/addCardPayment/{uid})]
+        [Add card to wallet API (Alias: /loyalty/acTokenStore/addCard)]
+        [Get cards from wallet API (Alias: /loyalty/acTokenStore/getCard)]
+        [Get token type API (Alias: /loyalty/acTokenStore/getCardTokenTypeg)]
+        [Update card in wallet API (Alias: /loyalty/acTokenStore/updateCardStatus)]
+        [Update card in wallet fn]
+        [Add card to wallet fn]
+        [Get cards from wallet fn]
+        [Get token type fn]
+        [Get cards from wallet fn]
+        [Token Store Migration fn]
+        [Get card API (Alias: M3. Talk to Emily)]
+
+      }
+    }
+  }
+
+  package "Frontend (ID: 14764)" {
+
+    component "Profile SPA (Alias: ABB)" {
+      [UI - AC Wallet]
+      [UI - Payment information]
+      [UI - Edit payment card]
+      [Profile Page]
+    }
+
+  }
+}
+
+@enduml
